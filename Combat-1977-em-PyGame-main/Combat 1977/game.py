@@ -8,6 +8,10 @@ pygame.init()
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Combat-Atari")
 
+joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+for joystick in joysticks:
+    joystick.init()
+
 tank_sprites = pygame.sprite.Group()
 tank1 = Tank(tank_1, 40, 280, 0)
 tank2 = Tank(tank_2, 730, 280, 8)
@@ -42,36 +46,38 @@ class Game:
             if hit_timer > 0:
                 hit_timer -= 1
                 return
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_a:
+            if event.type == pygame.JOYBUTTONDOWN:
+                if event.key == button_keys['left_arrow']:
                     tank1.rotate(rot_speed)
-                if event.key == pygame.K_d:
+                if event.key == button_keys['right_arrow']:
                     tank1.rotate(-rot_speed)
-                if event.key == pygame.K_w:
+                if event.key == button_keys['up_arrow']:
                     tank1.move_w()
-                if event.key == pygame.K_e:
-                    tank1.shoot_()
-                if event.key == pygame.K_k:
-                    tank2.shoot_()
-                if event.key == pygame.K_LEFT:
-                    tank2.rotate(rot_speed)
-                if event.key == pygame.K_RIGHT:
-                    tank2.rotate(-rot_speed)
-                if event.key == pygame.K_UP:
-                    tank2.move_w()
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_a:
+                # if event.key == pygame.K_k:
+                #    tank2.shoot_()
+                # if event.key == pygame.K_LEFT:
+                #    tank2.rotate(rot_speed)
+                # if event.key == pygame.K_RIGHT:
+                #    tank2.rotate(-rot_speed)
+                # if event.key == pygame.K_UP:
+                #    tank2.move_w()
+            if event.type == pygame.JOYBUTTONUP:
+                if event.key == button_keys['left_arrow']:
                     tank1.no_rot()
-                if event.key == pygame.K_d:
+                if event.key == button_keys['right_arrow']:
                     tank1.no_rot()
-                if event.key == pygame.K_w:
+                if event.key == button_keys['up_arrow']:
                     tank1.no_move_w()
-                if event.key == pygame.K_LEFT:
-                    tank2.no_rot()
-                if event.key == pygame.K_RIGHT:
-                    tank2.no_rot()
-                if event.key == pygame.K_UP:
-                    tank2.no_move_w()
+                # if event.key == pygame.K_LEFT:
+                #    tank2.no_rot()
+                # if event.key == pygame.K_RIGHT:
+                #    tank2.no_rot()
+                # if event.key == pygame.K_UP:
+                #    tank2.no_move_w()
+            if event.type == pygame.JOYAXISMOTION:
+                analog_triggers[event.axis] = event.value
+                if analog_triggers['l2'] > 0 or analog_triggers['r2'] > 0:
+                    tank1.shoot_()
 
     # Select Layout
     @staticmethod

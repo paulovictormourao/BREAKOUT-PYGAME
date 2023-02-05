@@ -44,3 +44,15 @@ rot_speed = 0.4
 ball_speed = 2
 shot_time = 10
 defeat_time = 5
+
+# Joystick buttons
+button_keys = {
+    "up_arrow": 11,
+    "left_arrow": 13,
+    "right_arrow": 14,
+}
+
+analog_triggers = {
+    "l2": -1,
+    "r2": -1
+}
